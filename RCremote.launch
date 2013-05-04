@@ -1,0 +1,9 @@
+<launch>
+
+  <node pkg="RCremote" type="RCremote.py" name="RCremote" respawn="true" output="screen">
+    <param name="port" value="/dev/sensors/ftdi_HuskyRemote" />
+    <param name="baud" value="57600" />
+   <param name="SpeedScale" value="1" />
+
+  </node>
+</launch>

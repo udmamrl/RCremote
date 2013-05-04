@@ -1,0 +1,3 @@
+rxplot /husky/data/system_status/temperatures[0],/husky/data/system_status/temperatures[1],/husky/data/system_status/temperatures[2],/husky/data/system_status/temperatures[3] &
+
+rxplot /husky/data/system_status/currents[1],/husky/data/system_status/currents[2] &
