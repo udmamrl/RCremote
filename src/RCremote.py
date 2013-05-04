@@ -173,7 +173,7 @@ if __name__ == '__main__':
     VelocityCommandPublisher = rospy.Publisher("/husky/cmd_vel", Twist)
     rospy.Subscriber("/RCremote/plan_cmd_vel", Twist, Autonomous_cmd_vel_cb)
     #Init D_RCremote port
-    D_RCremote_port = rospy.get_param('~port','/dev/ttyUSB0')
+    D_RCremote_port = rospy.get_param('~port','/dev/sensors/ftdi_HuskyRemote')
     D_RCremote_rate = rospy.get_param('~baud',57600)
     D_RCremote_WheelBase = rospy.get_param('~WheelBase',0.556)
     D_RCremote_SpeedScale = rospy.get_param('~SpeedScale',1.0)
@@ -235,7 +235,7 @@ if __name__ == '__main__':
                     VelocityCommandPublisher.publish(Twist())
                 continue
 
-            RC_DataTimeSec = rospy.get_rostime()
+            RC_DataTimeSec = rospy.get_time()
 
             try:
                     if '$' in data:
