@@ -127,6 +127,11 @@ def Autonomous_cmd_vel_cb(Twist_in):
     global VelocityCommandPublisher
     global Autonomous_cmd_vel_DataTimeSec
     if (PCRC):
+        if(Twist_in.linear.x>HuskyMaxSpeed):
+            Twist_in.linear.x=HuskyMaxSpeed
+        elif(Twist_in.linear.x < -HuskyMaxSpeed):
+            Twist_in.linear.x=-HuskyMaxSpeed
+
         VelocityCommandPublisher.publish(Twist_in)
         Autonomous_cmd_vel_DataTimeSec=rospy.get_time()
 #        rospy.info("Got Autonomous_cmd_vel %f" % Twist_in.linear.x)
@@ -167,7 +172,7 @@ if __name__ == '__main__':
     global Odom
     global HuskySafty
     global HuskyBatteryV
-    
+    global HuskyMaxSpeed    
     RC_DataTimeSec=0
     rospy.init_node('RCremote')
     VelocityCommandPublisher = rospy.Publisher("/husky/cmd_vel", Twist)
@@ -178,6 +183,7 @@ if __name__ == '__main__':
     D_RCremote_WheelBase = rospy.get_param('~WheelBase',0.556)
     D_RCremote_SpeedScale = rospy.get_param('~SpeedScale',1.0)
     D_RCremote_TurnRateScale = rospy.get_param('~TurnRateScale',1.0)
+    HuskyMaxSpeed = rospy.get_param('~HuskyMaxSpeed',2.25)
     WatchDogTimeOut = rospy.get_param('~WatchDogTimeOut',1.0)
     mMPH2ms  =0.001 * 0.44704 *D_RCremote_SpeedScale
     bias2rads=0.001 * 0.44704 *D_RCremote_TurnRateScale /D_RCremote_WheelBase
