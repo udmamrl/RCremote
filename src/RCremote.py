@@ -106,7 +106,13 @@ from nav_msgs.msg import Odometry
 import serial, string, math, time, calendar
 
 
-
+def limits(Hi,Lo,D_in):
+        if (D_in > Hi ):
+            return Hi
+        elif ( Lo > D_in ):
+            return Lo
+        else:
+            return D_in
 
 #Check the RC sentence checksum. Return True if passes and False if failed
 def check_checksum(remote_sentence):
@@ -127,12 +133,10 @@ def Autonomous_cmd_vel_cb(Twist_in):
     global VelocityCommandPublisher
     global Autonomous_cmd_vel_DataTimeSec
     if (PCRC):
-        if(Twist_in.linear.x>HuskyMaxSpeed):
-            Twist_in.linear.x=HuskyMaxSpeed
-        elif(Twist_in.linear.x < -HuskyMaxSpeed):
-            Twist_in.linear.x=-HuskyMaxSpeed
-
-        VelocityCommandPublisher.publish(Twist_in)
+        Twist_out = Twist()
+        Twist_out.linear.x  = limits(HuskyMaxSpeed,-HuskyMaxSpeed,Twist_in.linear.x)
+        Twist_out.angular.z = Twist_in.angular.z
+        VelocityCommandPublisher.publish(Twist_out)
         Autonomous_cmd_vel_DataTimeSec=rospy.get_time()
 #        rospy.info("Got Autonomous_cmd_vel %f" % Twist_in.linear.x)
 #        print Twist_in.linear.x
