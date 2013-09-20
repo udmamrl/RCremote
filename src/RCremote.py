@@ -187,7 +187,7 @@ if __name__ == '__main__':
     D_RCremote_WheelBase = rospy.get_param('~WheelBase',0.556)
     D_RCremote_SpeedScale = rospy.get_param('~SpeedScale',1.0)
     D_RCremote_TurnRateScale = rospy.get_param('~TurnRateScale',1.0)
-    HuskyMaxSpeed = rospy.get_param('~HuskyMaxSpeed',2.25)
+    HuskyMaxSpeed = rospy.get_param('~HuskyMaxSpeed',1.0)
     WatchDogTimeOut = rospy.get_param('~WatchDogTimeOut',1.0)
     mMPH2ms  =0.001 * 0.44704 *D_RCremote_SpeedScale
     bias2rads=0.001 * 0.44704 *D_RCremote_TurnRateScale /D_RCremote_WheelBase
@@ -261,7 +261,8 @@ if __name__ == '__main__':
                             if (rospy.get_time()-Autonomous_cmd_vel_DataTimeSec>WatchDogTimeOut):
                                 VelocityCommandPublisher.publish(Twist())
                         else: # RC mode
-                            velocityCommand.linear.x = speed_mMPH * mMPH2ms
+                            #velocityCommand.linear.x = speed_mMPH * mMPH2ms
+                            velocityCommand.linear.x =  limits(HuskyMaxSpeed,-HuskyMaxSpeed,speed_mMPH * mMPH2ms)
                             velocityCommand.angular.z = bias_mMPH *-1.* bias2rads
                             VelocityCommandPublisher.publish(velocityCommand)
                         # have to relay husky E-stop status to robot, 
